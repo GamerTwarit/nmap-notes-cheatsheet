@@ -1,52 +1,90 @@
-stealth scan is done by -sS
+<h1 align="center">🔎 Nmap Cheatsheet & Notes</h1>
+<p align="center">My personal notes while learning network scanning & enumeration with Nmap 🛰️</p>
 
-UDP scan for list of open ports by -sU
+---
 
--O for checking operating system
+## 📌 Scan Types
 
-checking version of services -sV
+| Command       | Description                 |
+|---------------|-----------------------------|
+| `-sS`         | 🔍 SYN Scan (Stealthy)       |
+| `-sU`         | 📡 UDP Scan                  |
+| `-sV`         | 🧪 Detect service versions   |
+| `-O`          | 🧠 Detect OS info            |
+| `-A`          | ⚡ Aggressive scan (OS, version, traceroute, scripts) |
 
-for more information ie verbosity -V and to increase the verbosity its -vv
+---
 
-now for saving the nmap scan , (all files -oA) (normal format -oN) (greppable -oG) 
+## 🔊 Verbosity Levels
 
-aggressive scan does almost everything, like its aggresive -A
+| Command  | Description               |
+|----------|---------------------------|
+| `-v`     | Verbose output            |
+| `-vv`    | Extra verbose             |
+| `-V`     | Nmap version (not verbosity) |
 
-in nmap time is a thing agressive scans or low timed scans are noisy and people can get caught -T0 (paranoid), -T1 (polite), -T2 (normal), -T3 (aggressive), -T4 (fast), or -T5 (brutal)
+---
 
-if we want to scan particular ports we can use -p <port number>, we can add more ports with "-"
+## 🕒 Timing Templates
 
-to scan all the ports we shall use -p-
+| Option | Timing Level |
+|--------|---------------|
+| `-T0`  | 🐢 Paranoid (very slow & stealthy) |
+| `-T1`  | 🐌 Polite       |
+| `-T2`  | 🚶 Normal       |
+| `-T3`  | 🏃 Aggressive   |
+| `-T4`  | 🚀 Fast         |
+| `-T5`  | ⚠️ Insane (very noisy) |
 
-to use our own script we shall use --script
+> ⚠️ High timing templates are faster but much noisier!
 
-to activate all vurn scripts we shall use --script=vuln
+---
 
-the types of NSE. nmap scripting engine:-
-    safe:- Won't affect the target
-    intrusive:- Not safe: likely to affect the target
-    vuln:- Scan for vulnerabilities
-    exploit:- Attempt to exploit a vulnerability
-    auth:- Attempt to bypass authentication for running services (e.g. Log into an FTP server anonymously)
-    brute:- Attempt to bruteforce credentials for running services
-    discovery:- Attempt to query running services for further information about the network (e.g. query an SNMP server).
-for more scripts https://nmap.org/book/nse-usage.html
+## 🗂️ Output Options
 
+| Command          | Output Type       |
+|------------------|------------------|
+| `-oN output.txt` | 📝 Normal format |
+| `-oG output.gnmap` | 🔍 Greppable format |
+| `-oA scanname`   | 📦 All formats (.nmap, .xml, .gnmap) |
 
-NSE scripts are written in LUA, yes even roblox games are made on that script 
+---
 
-its a bad idea to use intrusive script in a productive environment
+## 🎯 Port Scanning
 
-To run a specific script, we would use --script=<script-name> , e.g. --script=http-fileupload-exploiter.
-Multiple scripts can be run simultaneously in this fashion by separating them by a comma. For example: --script=smb-enum-users,smb-enum-shares.
+- `-p <port>` → Scan specific ports (e.g. `-p 22`, `-p 21,22,80`)
+- `-p 1-1000` → Scan port range
+- `-p-` → Scan **all** 65535 ports
 
-to find some scripts we use use it like 
+---
 
-here cd should be /usr/share/nmap/scripts/
+## 🧬 NSE Scripting Engine
+
+### ✅ Basic Usage
+
+- Run script: `--script=<script-name>`
+- Run multiple: `--script=script1,script2`
+- Run vuln scan: `--script=vuln`
+
+### 📚 NSE Categories:
+
+| Type       | 🔎 Description                          |
+|------------|------------------------------------------|
+| `safe`     | Doesn’t affect target                  |
+| `intrusive`| Might cause disruption                 |
+| `vuln`     | Looks for vulnerabilities              |
+| `exploit`  | Tries to exploit                       |
+| `auth`     | Attempts to bypass login/auth          |
+| `brute`    | Brute-force credentials                |
+| `discovery`| Network/service info gathering         |
+
+📖 **More scripts**: [nmap.org/book/nse-usage.html](https://nmap.org/book/nse-usage.html)  
+💡 NSE Scripts are written in **Lua** (same scripting as Roblox!)
+
+---
+
+## 🧰 Script Discovery
+
+```bash
+cd /usr/share/nmap/scripts/
 grep "smb" /usr/share/nmap/scripts/script.db
-
-
-while scanning
-SYN request is sent
-if a server is closed then RST flag is returnes
-SYN scan cant be run with
